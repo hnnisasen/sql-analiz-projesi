@@ -1,3 +1,34 @@
+/*
+Data Segmentation
+
+Amaç:
+- Ürünleri maliyet aralıklarına bölerek adetlerini saymak.
+- Müşterileri harcama davranışı ve süre (lifespan) temelinde segmentlere (VIP/Regular/New) ayırmak.
+
+Kullanım:
+1) product_segments CTE:
+   - cost → CASE ile bantlara ayrılır (Below 100, 100–500, 500–1000, Above 1000).
+   - Sonuç: her maliyet aralığında kaç ürün var.
+
+2) customer_spending CTE:
+   - Müşteri başına toplam harcama, ilk/son sipariş tarihi ve
+     DATEDIFF(MONTH, first_order, last_order) ile lifespan hesaplanır.
+   - İç sorguda CASE ile segment atanır:
+     - VIP    : lifespan ≥ 12 ve total_spending > 5000
+     - Regular: lifespan ≥ 12 ve total_spending ≤ 5000
+     - New    : lifespan < 12
+   - Dış sorgu: segment başına müşteri sayısı.
+
+Dikkat:
+- Para birimini netleştirin (örn. EUR). Eşikler (100, 500, 1000; 5000) ihtiyaca göre parametrize edilebilir.
+- Tarihler string ise TRY_CONVERT/CONVERT ile tarihe çevirin; NULL tarihleri hariç tutun.
+- Lifespan “ay farkı” tam yıl değildir; davranışa uygunluğu kontrol edin.
+- Çakışan segment koşullarında sınırlar dâhil mi? (≤ / <) netleştirildi.
+- Kategori/isim/cost NULL ise COALESCE ile “Unknown” vb. atama yapılabilir.
+*/
+
+
+
 -- Data Segmentation
 
 /* Segment products into cost ranges and 
@@ -24,8 +55,8 @@ GROUP BY cost_range
 ORDER BY total_products DESC
 
 /* Group customers into three segments based on their spending behaviour:
-	- VIP: Customers with at least 12 months of history and spending more than �5.000
-	- Regular: Customers with at least 12 months of history but spending �5.000 or less.
+	- VIP: Customers with at least 12 months of history and spending more than €5.000
+	- Regular: Customers with at least 12 months of history but spending €5.000 or less.
 	- New: Customers with a lifespan less than 12 months.
 And find the total number of customers by each group.
 */
@@ -58,4 +89,5 @@ FROM
 	FROM customer_spending
 ) AS t
 GROUP BY customer_segment
+
 

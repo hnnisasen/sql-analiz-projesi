@@ -1,7 +1,7 @@
 SQL Exploratory & Advanced Analysis
-Bu repo, Data with Baraa kanalındaki Exploratory Analysis ve Advanced Analysis SQL çalışmalarını birleştirerek oluşturduğum uygulamaları içerir.
+- Bu repo, Data with Baraa kanalındaki Exploratory Analysis ve Advanced Analysis SQL çalışmalarını birleştirerek oluşturduğum uygulamaları içerir.
 
-Amaç: Data with Baraa’dan esinlenen SQL tabanlı Exploratory ve Advanced Analysis çalışmalarını birleştirir. Veri keşfi ve özetlemeden; window functions, CTE, alt sorgular ve performans odaklı raporlamaya kadar uygulamalı örnekler sunar.
+- Amaç: Data with Baraa’dan esinlenen SQL tabanlı Exploratory ve Advanced Analysis çalışmalarını birleştirir. Veri keşfi ve özetlemeden; window functions, CTE, alt sorgular ve performans odaklı raporlamaya kadar uygulamalı örnekler sunar.
 
 Yeni Öğrendiğim Terimler (Teknik Sözlük)
   - Exploratory Analysis (Keşifsel Analiz) → Veriyi anlamak için yapılan ilk inceleme, trend ve anormallik tespiti.

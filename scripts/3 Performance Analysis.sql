@@ -1,3 +1,25 @@
+/*
+Performance Analysis (Yıllık Ürün Performansı)
+
+Amaç:
+- Ürünlerin yıllık satışlarını hem kendi ürün ortalamasına hem de önceki yıla (YoY) göre karşılaştırmak.
+
+Kullanım:
+- CTE `yearly_product_sales` ile yıl+ürün bazında toplam satış (current_sales) üretilir.
+- Pencere fonksiyonları:
+  - AVG(current_sales) OVER (PARTITION BY product_name)  → ürünün yıllık ortalaması
+  - LAG(current_sales) OVER (PARTITION BY product_name ORDER BY order_year) → önceki yıl satış
+- Çıktılar:
+  - diff_avg / avg_change  → ürünün yıllık satışının kendi ortalamasına göre farkı/sınıflaması
+  - diff_py  / py_change   → önceki yıla göre fark ve yön (Increase/Decrease/No Change)
+
+Dikkat:
+- İlk yıl için LAG() NULL döner; diff_py ve py_change hesapları buna göre NULL/“No Change” yorumlanabilir.
+- `order_year` hesaplaması YEAR(order_date) ile yapılır; farklı dönem (ay/çeyrek) istenirse CTE’deki gruplama güncellenmelidir.
+- `product_key`↔`product_name` eşleşmesi veri modeline uygun olmalı; isim değişkenliği varsa key ile çalışın.
+*/
+
+
 --	Performance Analysis
 
 /* Analyze the yearly performance of products by comparing their sales 
@@ -31,4 +53,5 @@ SELECT
 		 ELSE 'No Change'
 	END py_change
 FROM yearly_product_sales
+
 ORDER BY product_name, order_year
